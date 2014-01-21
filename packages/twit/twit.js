@@ -1,1 +1,1 @@
-Twit = npm.require("twit");
+Twit = Npm.require("twit");
