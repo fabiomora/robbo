@@ -8,13 +8,15 @@ if( Meteor.isServer ) {
   });
 
   Meteor.methods({
-    elencotweet: function() {
+    elencotweet: function(filtro) {
       var fut = new Future();
 
-      T.get( 'search/tweets', { q: 'grazie', count: 8}, function(err, reply) {
-        console.log("ottenuti i tweet!!!");
-        fut['return'](reply);
-      });
+      T.get( 'search/tweets', { q: filtro, count: 8}, 
+          function(err, reply) { 
+            console.log("ottenuti i tweet!!!"); 
+            fut['return'](reply); 
+          }
+      );
       
       return fut.wait();
     }
@@ -29,10 +31,12 @@ if( Meteor.isClient ) {
     }
   });
 
-  Template.twitterate.events = {
+  Template.twitterate.events({
     'click #gettwit': function() {
-      Meteor.call("elencotweet", function(err, argum) {  console.log(argum.statuses); Session.set('itweets', argum); });
+      Meteor.call("elencotweet", $('#filtro').val(), 
+        function(err, argum) {  
+          console.log(argum.statuses); 
+          Session.set('itweets', argum); });
     }
-  };
+  });
 }
-
