@@ -11,6 +11,8 @@ if( Meteor.isServer ) {
     elencotweet: function(filtro) {
       var fut = new Future();
 
+      console.log(filtro);
+
       T.get( 'search/tweets', { q: filtro, count: 8}, 
           function(err, reply) { 
             console.log("ottenuti i tweet!!!"); 
@@ -32,14 +34,20 @@ if( Meteor.isClient ) {
   });
 
   Template.twitterate.events({
-    'click #gettwit': function() {
+    'click #gettit' : function() {
+      console.log("Call!");
       Meteor.call("elencotweet", $('#filtro').val(), 
         function(err, argum) {  
+          console.log("Ha!");
+          console.log(argum.statuses); 
+
           argum.statuses = _.sortBy(argum.statuses, function(a) {
             return -a.retweet_count;
           });
-          console.log(argum.statuses); 
-          Session.set('itweets', argum); });
+
+          Session.set('itweets', argum);
+        }
+      );
     }
   });
 }
