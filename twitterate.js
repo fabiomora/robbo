@@ -35,6 +35,9 @@ if( Meteor.isClient ) {
     'click #gettwit': function() {
       Meteor.call("elencotweet", $('#filtro').val(), 
         function(err, argum) {  
+          argum.statuses = _.sortBy(argum.statuses, function(a) {
+            return -a.retweet_count;
+          });
           console.log(argum.statuses); 
           Session.set('itweets', argum); });
     }
